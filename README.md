@@ -4,7 +4,8 @@
 * Login and Registration
     * Passwords salted and hashed
     * Form validation
-* Logged in users can contribute artists, bands, and albums to the database
+* Logged in users can contribute bands and albums to the database
+    * New album entries must be tied to a band already in the database
 * Home page will show recent additions to the database
 
 ### Secondary Features
