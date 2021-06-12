@@ -9,10 +9,14 @@ urlpatterns = [
     path('bands/create', views.create_band),
     path('albums', views.album_list),
     path('albums/<int:id>', views.show_album),
-    path('albums/new', views.new_album),
     path('albums/create', views.create_album),
     path('users', views.user_list),
     path('users/<int:id>', views.show_user),
+    path('users/create', views.create_user),
+    path('signin', views.signin),
+    path('register', views.register),
+    path('login', views.login),
+    path('logout', views.logout),
     #Delete band
     #Delete album
 ]

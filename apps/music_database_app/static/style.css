@@ -1,0 +1,5 @@
+#navbar{
+    display: flex;
+    border-bottom: 3px solid gray;
+    justify-content: space-between;
+}
