@@ -28,7 +28,7 @@ class User_Manager(models.Manager):
         if post_data['password'] != post_data['confirm']:
             errors['no_match'] = "Password confirmation must match"
 
-        #If username already exists
+        #Check if username already exists
 
         return errors
 
@@ -36,7 +36,12 @@ class User(models.Model):
     username = models.CharField(max_length=32)
     email = models.EmailField(max_length=64)
     password = models.TextField()
+    
     ##Foreign Keys
+    # added_bands
+    # edited_bands
+    # added_albums
+    # edited_albums
         
     objects = User_Manager()
     created_at = models.DateTimeField(auto_now_add=True)

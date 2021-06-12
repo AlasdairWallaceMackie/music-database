@@ -5,6 +5,7 @@ from django.contrib import messages
 import bcrypt
 
 def signin(request):
+    #Can sign in with either username or email
     return HttpResponse("Sign In Page")
 
 def register(request):
