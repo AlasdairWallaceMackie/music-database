@@ -28,6 +28,8 @@ class User_Manager(models.Manager):
         if post_data['password'] != post_data['confirm']:
             errors['no_match'] = "Password confirmation must match"
 
+        #If username already exists
+
         return errors
 
 class User(models.Model):
