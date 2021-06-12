@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>The Music Database</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="shortcut icon" href="{% static 'icons/music-note.svg' %}">
+</head>
+<body>
+    {% include 'util/navbar.html' %}
+
+    <main class="container d-flex justify-content-evenly">
+        <fieldset>
+            <legend>Submit a new band</legend>
+            <form action="/bands/create" method="POST">
+                {% csrf_token %}
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name">
+                <br>
+                <label for="genre">Genre:</label>
+                <select name="genre" id="genre"></select>
+                <br>
+                <p>OR</p>
+                <br>
+                <label for="new_genre">Add a new genre:</label>
+                <input type="text" name="new_genre" id="new_genre">
+                <br>
+                <label for="founded">Year Founded:</label>
+                <input type="number" name="founded" id="founded">
+                <br>
+                <label for="country">Country:</label>
+                <select name="country" id="country"></select>
+                <br>
+                <label for="status">Status:</label>
+                <select name="status" id="status">
+                    <option value="2">Active</option>
+                    <option value="1">Hiatus</option>
+                    <option value="0">Split-Up</option>
+                </select>
+                <br>
+                <button>Submit</button>
+            </form>
+        </fieldset>
+    </main>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

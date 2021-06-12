@@ -1,32 +1,32 @@
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 from .models import *
+import bcrypt
+from django.contrib import messages
 
 
 def home(request):
-    return HttpResponse("<h1>Home Page</h1>")
+    return render(request, 'home.html')
 
 def band_list(request):
-    return HttpResponse("<h2>Band List</h2>")
+    return render(request, 'band_list.html')
 
 def show_band(request, id):
-    return HttpResponse(f"Band ID: {id}")
+    return render(request, 'show_band.html')
 
 def new_band(request):
-    return HttpResponse(f"Form to add a new band")
+    return render(request, 'new_band.html')
 
 def create_band(request):
     return HttpResponse("Placeholder to add band to database")
 
 
+
 def album_list(request):
-    return HttpResponse("List of albums")
+    return render(request, 'album_list.html')
 
 def show_album(request, id):
     return HttpResponse("Album ID: {id}")
-
-def new_album(request):
-    return HttpResponse("Form to add new album")
 
 def create_album(request):
     return HttpResponse("Placeholder to add album to database")
@@ -36,3 +36,22 @@ def user_list(request):
 
 def show_user(request, id):
     return HttpResponse("User id: {id}")
+
+def create_user(request):
+    return HttpResponse("Placeholder for create_user logic")
+
+
+
+def signin(request):
+    return render(request, 'signin.html')
+
+def register(request):
+    return render(request, 'register.html')
+
+def login(request):
+    #Check credentials
+    return redirect('/')
+
+def logout(request):
+    request.session.flush()
+    return redirect('/')
