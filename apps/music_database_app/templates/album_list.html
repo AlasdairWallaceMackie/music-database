@@ -8,7 +8,7 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container d-flex justify-content-evenly">
+    <main>
         <h1>Album List</h1>
 
         <table>
@@ -16,8 +16,10 @@
             <tbody>
                 {% for album in albums %}
                     <tr>
-                        <td>album.title</td>
-                        <td>album.band</td>
+                        <td><img style="height: 100px;" src="{{album.cover_art.url}}"></td>
+                        <td><a href="/albums/{{album.id}}">{{album.title}}</td>
+                        <td><a href="/bands/{{album.band.id}}">{{album.band.name}}</a></td>
+                        <td>{{album.release_date}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
