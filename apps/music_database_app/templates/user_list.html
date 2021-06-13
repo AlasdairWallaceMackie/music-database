@@ -8,20 +8,18 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container d-flex justify-content-evenly">
-        <h1>List of Bands</h1>
-        <a href="/bands/new"><button>Add a New Band</button></a>
+    <main class="container">
+        <h1>User List</h1>
         <table>
-            <thead></thead>
+            <thead>
+                <th>ID</th>
+                <th>Username</th>
+            </thead>
             <tbody>
-                {% for band in bands %}
+                {% for user in users %}
                     <tr>
-                        <td>{{band.id}}</td>
-                        <td>{{band.name}}</td>
-                        <td>{{band.country}}</td>
-                        <td>{{band.founded}}</td>
-                        <td>{{band.status}}</td>
-                        <td><i>Number of albums</i></td>
+                        <td>{{user.id}}</td>
+                        <td>{{user.username}}</td>
                     </tr>
                 {% endfor %}
             </tbody>

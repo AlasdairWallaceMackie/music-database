@@ -9,14 +9,14 @@ class Band_Manager(models.Manager):
     def basic_validator(self, post_data):
         errors = {}
 
-        if len(post_data['name']) < 1 or len( post_data['name'] > 128 ):
+        if len( post_data['name'] ) < 1 or len( post_data['name'] )> 128:
             errors['name_length'] = "Invalid band name length"
 
-        GENRE_REGEX = re.compile( r"^[a-zA-Z\-\'\s]{2,32}$" )
-        if not GENRE_REGEX.match( post_data['genre'] ):
-            errors['invalid_genre'] = "Please enter a valid genre name"
+        # GENRE_REGEX = re.compile( r"^[a-zA-Z\-\'\s]{2,32}$" )
+        # if not GENRE_REGEX.match( post_data['genre'] ) or not GENRE_REGEX.match( post_data['new_genre'] ):
+        #     errors['invalid_genre'] = "Please enter a valid genre name"
 
-        if post_data['founded'] < 1700 or post_data['founded'] > int( date.today().year ) or not post_data['founded'].is_integer():
+        if int(post_data['founded']) < 1700 or int(post_data['founded']) > int( date.today().year ):
             errors['invalid year'] = "Please enter a valid year"
 
         return errors
@@ -29,15 +29,9 @@ class Album_Manager(models.Manager):
 
         return errors
 
-class Genre(models.Model):
-    name = models.CharField(max_length=32)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
 class Band(models.Model):
     name = models.CharField(max_length=128)
-    genre = models.ForeignKey(Genre, on_delete=models.PROTECT, related_name="bands")
+    genre = models.CharField(max_length=32)
     founded = models.IntegerField() #Year
     country = CountryField()
     status = models.IntegerField()
