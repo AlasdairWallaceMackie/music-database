@@ -10,20 +10,34 @@
 
     <main class="container d-flex justify-content-evenly">
         <div>
+            {% if band.uploader_id == request.session.current_user_id %}
+                <form action="{{band.id}}/destroy" method="POST">
+                    {% csrf_token %}
+                    <button>Delete Band</button>
+                </form>
+            {% endif %}
             <h2>{{band.name}}</h2>
             <p>Genre: {{band.genre}}</p>
             <p>Founded: {{band.founded}}</p>
-            <p>Country: {{band.country}} {{band.country.flag}}</p>
+            <p>Country: {{band.country.name}} <img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></p>
         </div>
         <div>
             <h3>Albums</h3>
-                {% for album in band.albums.all %}
-                    <div>
-                        <strong>ARTWORK</strong>
-                        <a href="/albums/{{album.id}}">{{album.title}}</a>
-                        {{album.release_date}}
-                    </div>
-                {% endfor %}
+            {% if request.session.current_username %}
+                <button id="add-album">Add an Album</button>
+                <div id="album-form-container" style="display: none;">
+                    {% include 'util/new_album_form.html' %}
+                </div>
+            {% endif %}
+            {% for album in band.albums_recent_first %}
+                <div>
+                    <a href="/albums/{{album.id}}">
+                        <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+                        {{album.title}}
+                    </a>
+                    {{album.release_date}}
+                </div>
+            {% endfor %}
         </div>
     </main>
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{album.title}} - The Music Database</title>
+    {% load static %}
+    {% include 'util/head.html' %}
+</head>
+<body>
+    {% include 'util/navbar.html' %}
+
+    <main class="container d-flex justify-content-evenly">
+        <div>
+            <h1>{{album.title}}</h1>
+            <h3>By <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h3>
+            <br>
+            <p>Released on: {{album.release_date}}</p>
+            <br>
+            <small><i>Added by: </i><a href="/users/{{album.added_by.id}}">{{album.added_by.username}}</a></small>
+        </div>
+        <img style="height: 400px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+    </main>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

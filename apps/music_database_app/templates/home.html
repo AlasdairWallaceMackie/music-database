@@ -11,9 +11,33 @@
     <main class="container d-flex justify-content-evenly">
         <div id="newest-album-releases">
             <h3>Newest Album Releases</h3>
+            <ul>
+                {% for album in newest_albums %}
+                <div class="container d-flex">
+                    <a href="/albums/{{album.id}}">
+                        <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+                    </a>
+                    <div>
+                        {{album.title}} by <a href="/bands/{{album.band.id}}">{{album.band.name}}</a>
+                        <br>
+                        {{album.release_date}}
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
         </div>
         <div id="recently-added-bands">
             <h3>Recently Added Bands</h3>
+            <ul>
+                {% for band in recent_bands %}
+                    <li>
+                        <a href="/bands/{{band.id}}">{{band.name}}</a>
+                        <ul>
+                            <li><small><i>Uploaded by: </i><a href="/users/{{band.uploader_id}}">{{band.added_by.username}}</a> on {{band.created_at}}</small></li>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </main>
 

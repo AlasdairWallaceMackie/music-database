@@ -8,8 +8,20 @@
             <a href="/albums">Albums</a>
         </div>
         <div>
-            <a href="/signin">Log In</a>
-            <button><a href="/register">Sign Up</a></button>
+            {% if request.session.current_username %}
+                <small>Signed in as: <a href="/users/{{request.session.current_user_id}}">{{request.session.current_username}}</a></small>
+                <a href="/logout"><button>Log Out</button></a>
+            {% else %}
+                <a href="/signin">Log In</a>
+                <a href="/register"><button>Sign Up</button></a>
+            {% endif %}
         </div>
     </div>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </html>
