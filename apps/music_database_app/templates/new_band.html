@@ -8,16 +8,16 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container d-flex justify-content-evenly">
+    <main class="container rounded bg-dark d-flex mx-lg-auto col-md-6 p-3 justify-content-evenly">
         <fieldset>
-            <legend>Submit a new band</legend>
+            <legend><h3>Submit a new band</h3></legend>
             <form action="/bands/create" method="POST">
                 {% csrf_token %}
-                <label for="name">Name:</label>
-                <input type="text" name="name" id="name">
+                <label class="form-label" for="name">Name:</label>
+                <input class="form-control" type="text" name="name" id="name">
                 <br>
-                <label for="genre">Genre:</label>
-                <select name="genre" id="genre">
+                <label class="form-label" for="genre">Genre:</label>
+                <select class="form-select" name="genre" id="genre">
                     <option value="" selected disabled>Choose...</option>
                     <option value="Metal">Metal</option>
                     <option value="Rock">Rock</option>
@@ -28,25 +28,25 @@
                     <option value="Folk">Folk</option>
                 </select>
                 <br>
-                <label for="founded">Year Founded:</label>
-                <input type="number" name="founded" id="founded">
+                <label class="form-label" for="founded">Year Founded:</label>
+                <input class="form-control" type="number" name="founded" id="founded">
                 <br>
-                <label for="country">Country:</label>
-                <select name="country" id="country">
+                <label class="form-label" for="country">Country:</label>
+                <select class="form-select" name="country" id="country">
                     <option value="" selected disabled>Choose a country</option>
                     {% for country in countries %}
                         <option value="{{country.code}}">{{country.name}}</option>
                     {% endfor %}
                 </select>
                 <br>
-                <label for="status">Status:</label>
-                <select name="status" id="status">
+                <label class="form-label" for="status">Status:</label>
+                <select class="form-select" name="status" id="status">
                     <option value="2">Active</option>
                     <option value="1">Hiatus</option>
                     <option value="0">Split-Up</option>
                 </select>
                 <br>
-                <button>Submit</button>
+                <button class="btn btn-success" type="submit">Submit</button>
             </form>
         </fieldset>
     </main>

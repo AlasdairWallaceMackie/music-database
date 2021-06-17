@@ -19,8 +19,11 @@ class Band_Manager(models.Manager):
         # if not GENRE_REGEX.match( post_data['genre'] ) or not GENRE_REGEX.match( post_data['new_genre'] ):
         #     errors['invalid_genre'] = "Please enter a valid genre name"
 
-        if int(post_data['founded']) < 1700 or int(post_data['founded']) > int( date.today().year ):
-            errors['invalid year'] = "Please enter a valid year"
+        try:
+            if int(post_data['founded']) < 1700 or int(post_data['founded']) > int( date.today().year ):
+                errors['invalid year'] = "Please enter a valid year"
+        except:
+            errors['no_year'] = "Please enter a year"
 
         return errors
 
@@ -36,6 +39,8 @@ class Album_Manager(models.Manager):
 
         if not post_data['release_date']:
             errors['no_release_date'] = "Please enter a full release date (Month, day, year)"
+
+        ##Date cannot be in the future
 
         if not post_data['added_by_id']:
             errors['no_uploader'] = "No uploader associated"

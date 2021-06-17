@@ -37,9 +37,10 @@ def create_band(request):
         print("Creating band, checking for errors")
         errors = Band.objects.basic_validator(request.POST)
         if errors:
+            print("Errors found")
             for k,v in errors.items():
                 messages.error(request, v)
-            return redirect('/new_band')
+            return redirect('/bands/new')
 
         current_user = User.objects.get(id = request.session['current_user_id'])
 
@@ -137,6 +138,9 @@ def create_album(request):
         messages.success(request, "Album successfully added")
 
     return redirect(f"/bands/{band.id}")
+
+def update_album(request, id):
+    return HttpResponse(f"Placeholder to update album id: {id}")
 
 def delete_album(request, id):
     return HttpResponse(f"Placeholder to delete album ID: {id}")
