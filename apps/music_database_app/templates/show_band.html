@@ -8,11 +8,12 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container rounded mx-auto d-lg-flex justify-content-evenly">
+    <main class="container mx-auto d-lg-flex align-items-start justify-content-evenly">
 
         <div class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
             <h1>{{band.name}}</h1>
             {% if request.session.current_username %}
+                <br>
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
                     <ul class="dropdown-menu">
@@ -22,6 +23,7 @@
                         {% endif %}
                     </ul>
                 </div>
+                <br>
             {% endif %}
             <p>Genre: {{band.genre}}</p>
             <p>Founded: {{band.founded}}</p>
@@ -38,7 +40,7 @@
                 <div class="container bg-secondary rounded my-3 p-3">
                     <img class="d-inline-block me-3 mb-3 mb-sm-0" style="height: 200px; width: 200px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
                     <div class="d-inline-block">
-                        <a class="no-decoration text-wrap" href="/albums/{{album.id}}"><h2>{{album.title}}</h2></a>
+                        <a class="text-wrap" href="/albums/{{album.id}}"><h2>{{album.title}}</h2></a>
                         <p>{{album.release_date}}</p>
                     </div>
                     

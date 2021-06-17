@@ -16,6 +16,7 @@
         <table class="table table-striped table-secondary mt-3">
             <thead>
                 <th>Name</th>
+                <th>Genre</th>
                 <th>Country</th>
                 <th>Founded</th>
                 <th>Status</th>
@@ -25,6 +26,7 @@
                 {% for band in bands %}
                     <tr>
                         <td><a href="/bands/{{band.id}}">{{band.name}}</a></td>
+                        <td>{{band.genre}}</td>
                         <td><img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></td>
                         <td>{{band.founded}}</td>
                         <td>{{band.get_status}}</td>
