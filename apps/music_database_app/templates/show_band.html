@@ -8,44 +8,50 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container d-flex justify-content-evenly">
-        <div>
-            {% if band.uploader_id == request.session.current_user_id %}
-                <form action="{{band.id}}/destroy" method="POST">
-                    {% csrf_token %}
-                    <button>Delete Band</button>
-                </form>
+    <main class="container rounded mx-auto d-lg-flex justify-content-evenly">
+
+        <div class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
+            <h1>{{band.name}}</h1>
+            {% if request.session.current_username %}
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item pointer">Edit</li>
+                        {% if band.uploader_id == request.session.current_user_id %}
+                            <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-band-modal">Delete</li>
+                        {% endif %}
+                    </ul>
+                </div>
             {% endif %}
-            <h2>{{band.name}}</h2>
             <p>Genre: {{band.genre}}</p>
             <p>Founded: {{band.founded}}</p>
             <p>Country: {{band.country.name}} <img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></p>
         </div>
-        <div>
-            <h3>Albums</h3>
+
+        <div class="container rounded bg-dark p-4 mx-lg-3">
+            <h2>Albums</h2>
             {% if request.session.current_username %}
-                <button id="add-album">Add an Album</button>
-                <div id="album-form-container" style="display: none;">
-                    {% include 'util/new_album_form.html' %}
-                </div>
+                <button id="add-album" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-album-modal">Add an Album</button>
+                {% include 'util/add_album_modal.html' %}
             {% endif %}
             {% for album in band.albums_recent_first %}
-                <div>
-                    <a href="/albums/{{album.id}}">
-                        <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
-                        {{album.title}}
-                    </a>
-                    {{album.release_date}}
+                <div class="container bg-secondary rounded my-3 p-3">
+                    <img class="d-inline-block me-3 mb-3 mb-sm-0" style="height: 200px; width: 200px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+                    <div class="d-inline-block">
+                        <a class="no-decoration text-wrap" href="/albums/{{album.id}}"><h2>{{album.title}}</h2></a>
+                        <p>{{album.release_date}}</p>
+                    </div>
+                    
+                    
                 </div>
             {% endfor %}
         </div>
     </main>
 
+    {% if request.session.current_username %}
+        {% include 'util/delete_band_modal.html' %}
+    {% endif %}
 
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-<script src="{% static 'script.js' %}"></script>
+    {% include 'util/scripts.html' %}
 </body>
 </html>
