@@ -1,15 +1,7 @@
-#navbar{
-    display: flex;
-    border-bottom: 3px solid gray;
-    justify-content: space-between;
+.pointer{
+    cursor: pointer;
 }
 
-#album-form-container{
-    position: fixed;
-    left: 25%;
-    top: 25%;
-    box-shadow: 3px 3px 3px black;
-    background-color: white;
-    border: 1px solid black;
-    padding: 20px;
+a{
+    text-decoration: none;
 }
