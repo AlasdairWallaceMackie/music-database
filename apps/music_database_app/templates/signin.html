@@ -9,18 +9,19 @@
     {% include 'util/navbar.html' %}
 
     <main>
-        <fieldset>
+        <fieldset class="container rounded bg-dark p-3 col-md-6 col-lg-4 mx-auto">
             <legend>Sign In</legend>
             <form action="/login" method="POST">
                 {% csrf_token %}
-                <label for="username">Username or Email:</label>
-                <input type="text" name="username" id="username">
+                <label class="form-label" for="username">Username or Email:</label>
+                <input class="form-control" type="text" name="username" id="username">
                 <br>
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password">
                 <br>
-                <button>Sign In</button>
+                <button class="btn btn-primary">Sign In</button>
             </form>
+            <br>
             <p>Don't have an account? <a href="/register">Register Here</a></p>
         </fieldset>
     </main>

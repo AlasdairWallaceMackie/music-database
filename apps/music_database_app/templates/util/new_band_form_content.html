@@ -1,0 +1,35 @@
+<html>
+    <label class="form-label" for="name">Name:</label>
+    <input class="form-control" type="text" name="name" id="name">
+    <br>
+    <label class="form-label" for="genre">Genre:</label>
+    <select class="form-select" name="genre" id="genre">
+        <option value="" selected disabled>Choose...</option>
+        <option value="Metal">Metal</option>
+        <option value="Rock">Rock</option>
+        <option value="Pop">Pop</option>
+        <option value="Rap">Rap</option>
+        <option value="Country">Country</option>
+        <option value="Electronic">Electronic</option>
+        <option value="Folk">Folk</option>
+    </select>
+    <br>
+    <label class="form-label" for="founded">Year Founded:</label>
+    <input class="form-control" type="number" name="founded" id="founded">
+    <br>
+    <label class="form-label" for="country">Country:</label>
+    <select class="form-select" name="country" id="country">
+        <option value="" selected disabled>Choose a country</option>
+        {% for country in countries %}
+            <option value="{{country.code}}">{{country.name}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label class="form-label" for="status">Status:</label>
+    <select class="form-select" name="status" id="status">
+        <option value="2">Active</option>
+        <option value="1">Hiatus</option>
+        <option value="0">Split-Up</option>
+    </select>
+    <br>
+</html>
