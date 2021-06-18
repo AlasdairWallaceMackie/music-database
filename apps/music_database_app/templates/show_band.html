@@ -10,14 +10,13 @@
 
     <main class="container mx-auto d-lg-flex align-items-start justify-content-evenly">
 
-        <div class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
-            <h1>{{band.name}}</h1>
+        <div id="band-info" class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
+            <h1><span>{{band.name}}</span></h1>
             {% if request.session.current_username %}
-                <br>
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-item pointer">Edit</li>
+                        <li id="edit-band" class="dropdown-item pointer">Edit</li>
                         {% if band.uploader_id == request.session.current_user_id %}
                             <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-band-modal">Delete</li>
                         {% endif %}
@@ -25,9 +24,10 @@
                 </div>
                 <br>
             {% endif %}
-            <p>Genre: {{band.genre}}</p>
-            <p>Founded: {{band.founded}}</p>
-            <p>Country: {{band.country.name}} <img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></p>
+            <p>Genre: <span>{{band.genre}}</span></p>
+            <p>Founded: <span>{{band.founded}}</span></p>
+            <p>Country: <span>{{band.country.name}}<img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></span></p>
+            <p>Status: <span>{{band.get_status}}</span></p>
         </div>
 
         <div class="container rounded bg-dark p-4 mx-lg-3">
@@ -43,8 +43,6 @@
                         <a class="text-wrap" href="/albums/{{album.id}}"><h2>{{album.title}}</h2></a>
                         <p>{{album.release_date}}</p>
                     </div>
-                    
-                    
                 </div>
             {% endfor %}
         </div>
@@ -52,6 +50,14 @@
 
     {% if request.session.current_username %}
         {% include 'util/delete_band_modal.html' %}
+        <div id="update-band" class="">
+            <form id="update-band-form" class="container bg-dark" action="/bands/{{band.id}}/update" method="POST">
+                {% csrf_token %}
+                {% include 'util/new_band_form_content.html' %}
+                <button class="btn btn-warning" type="submit">Update</button>
+                <button id="cancel" class="btn btn-secondary" type="button">Cancel</button>
+            </form>
+        </div>
     {% endif %}
 
     {% include 'util/scripts.html' %}

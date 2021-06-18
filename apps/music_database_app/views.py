@@ -140,6 +140,46 @@ def create_album(request):
     return redirect(f"/bands/{band.id}")
 
 def update_album(request, id):
+    if request.method=="POST":
+        print(f"Updating album id: {id}")
+        try:
+            album_to_update = Album.objects.get(id = id)
+        except:
+            print("Album not found")
+            return HttpResponse("<h1>Error: Album not found</h1>")
+
+        errors = Album.objects.update_validator(request.POST)
+
+        if errors:
+            print("Errors found when updating album")
+            for k,v in errors.items():
+                messages.error(request, v)
+            return redirect(f'/albums/{id}')
+        
+        print(f"Title: {request.POST['title']}")
+        print(f"Date: {request.POST['release_date']}")
+        print(f"Artwork: {request.FILES}")
+        
+        changed = False
+
+        if request.POST['title'] != "":
+            print("********************Trigger1")
+            album_to_update.title = request.POST['title']
+            changed = True
+
+        if request.POST['release_date'] != "":
+            print("********************Trigger2")
+            album_to_update.release_date = request.POST['release_date']
+            changed = True
+
+        if changed == True:
+            album_to_update.last_edited_by = User.objects.get(id = request.session['current_user_id'])
+            album_to_update.save()
+            messages.success(request, "Album info updated!")
+        else:
+            messages.warning(request, "No changes were made")
+        return redirect(f'/albums/{id}')
+
     return HttpResponse(f"Placeholder to update album id: {id}")
 
 def delete_album(request, id):

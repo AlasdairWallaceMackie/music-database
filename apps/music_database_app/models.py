@@ -28,11 +28,15 @@ class Band_Manager(models.Manager):
         return errors
 
 class Album_Manager(models.Manager):
+
     def basic_validator(self, post_data):
         errors = {}
 
-        if not post_data['title']:
+        if len(post_data['title']) == 0:
             errors['no_title'] = "Please add a title"
+
+        if len(post_data['title']) > 128:
+            errors['title_too_long'] = "Title is too long"
 
         if not post_data['band']:
             errors['no_band'] = "No band associated with album"
@@ -47,6 +51,15 @@ class Album_Manager(models.Manager):
 
         if not User.objects.filter(id = post_data['added_by_id']):
             errors['invalid_uploader'] = "Invalid uploader"
+
+        return errors
+    
+    def update_validator(self, post_data):
+        errors = {}
+
+        if post_data['title'] != "":
+            if len(post_data['title']) > 128:
+                errors['title_too_long'] = "Title is too long"
 
         return errors
 

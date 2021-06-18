@@ -9,24 +9,25 @@
     {% include 'util/navbar.html' %}
 
     <main>
-        <fieldset>
+        <fieldset class="container rounded bg-dark col-md-6 col-lg-4 p-3 mx-auto">
             <legend>Register a New Account</legend>
             <form action="/users/create" method="POST">
                 {% csrf_token %}
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username">
+                <label class="form-label" for="username">Username:</label>
+                <input class="form-control" type="text" name="username" id="username">
                 <br>
-                <label for="email">Email:</label>
-                <input type="text" name="email" id="email">
+                <label class="form-label" for="email">Email:</label>
+                <input class="form-control" type="text" name="email" id="email">
                 <br>
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password">
                 <br>
-                <label for="confirm">Confirm:</label>
-                <input type="password" name="confirm" id="confirm">
+                <label class="form-label" for="confirm">Confirm:</label>
+                <input class="form-control" type="password" name="confirm" id="confirm">
                 <br>
-                <button>Register</button>
+                <button class="btn btn-success" type="submit">Register</button>
             </form>
+            <br>
             <p>Already have an account? <a href="/signin">Sign In</a></p>
         </fieldset>
     </main>
