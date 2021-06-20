@@ -8,6 +8,7 @@ urlpatterns = [
     path('bands/new', views.new_band),
     path('bands/create', views.create_band),
     path('bands/<int:id>/destroy', views.delete_band),
+    path('bands/<int:id>/update', views.update_band),
     path('albums', views.album_list),
     path('albums/<int:id>', views.show_album),
     path('albums/create', views.create_album),

@@ -10,24 +10,31 @@
 
     <main class="container mx-auto d-lg-flex align-items-start justify-content-evenly">
 
-        <div id="band-info" class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
-            <h1><span>{{band.name}}</span></h1>
-            {% if request.session.current_username %}
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
-                    <ul class="dropdown-menu">
-                        <li id="edit-band" class="dropdown-item pointer">Edit</li>
-                        {% if band.uploader_id == request.session.current_user_id %}
-                            <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-band-modal">Delete</li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <br>
-            {% endif %}
-            <p>Genre: <span>{{band.genre}}</span></p>
-            <p>Founded: <span>{{band.founded}}</span></p>
-            <p>Country: <span>{{band.country.name}}<img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></span></p>
-            <p>Status: <span>{{band.get_status}}</span></p>
+        <div class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
+            <div id="band-info">
+                <h1 id="band-name"><span>{{band.name}}</span></h1>
+                {% if request.session.current_username %}
+                    <form id="update-band-form" class="container bg-dark" action="/bands/{{band.id}}/update" method="POST">
+                    {% csrf_token %}
+                {% endif %}
+                <p>Genre: <span>{{band.genre}}</span></p>
+                <p>Year Founded: <span>{{band.founded}}</span></p>
+                <p>Country: <span>{{band.country.name}}<img class="ms-2" src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></span></p>
+                <p>Status: <span>{{band.get_status}}</span></p>
+                {% if request.session.current_username %}
+                    </form>
+                {% endif %}
+            </div>
+
+            <div id="band-actions-button" class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+                <ul class="dropdown-menu">
+                    <li id="edit-band" class="dropdown-item pointer">Edit</li>
+                    {% if band.uploader_id == request.session.current_user_id %}
+                        <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-band-modal">Delete</li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
 
         <div class="container rounded bg-dark p-4 mx-lg-3">
@@ -50,13 +57,13 @@
 
     {% if request.session.current_username %}
         {% include 'util/delete_band_modal.html' %}
+
         <div id="update-band" class="">
-            <form id="update-band-form" class="container bg-dark" action="/bands/{{band.id}}/update" method="POST">
-                {% csrf_token %}
-                {% include 'util/new_band_form_content.html' %}
+            {% include 'util/new_band_form_content.html' %}
+            <div id="button-group">
                 <button class="btn btn-warning" type="submit">Update</button>
                 <button id="cancel" class="btn btn-secondary" type="button">Cancel</button>
-            </form>
+            </div>
         </div>
     {% endif %}
 

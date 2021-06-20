@@ -6,26 +6,29 @@ from ..login_and_reg_app.models import *
 import re
 
 class Band_Manager(models.Manager):
-    def basic_validator(self, post_data):
+    def basic_validator(self, post_data, type="create"):
         errors = {}
 
-        if len( post_data['name'] ) < 1 or len( post_data['name'] )> 128:
-            errors['name_length'] = "Invalid band name length"
+        if (type == "update" and post_data['name'] != "") or type=="create":
+            if len( post_data['name'] ) < 1 or len( post_data['name'] )> 128:
+                errors['name_length'] = "Invalid band name length"
 
-        if Band.objects.filter( name = post_data['name'].title() ):
-            errors['duplicate_band'] = "Band already exists in database"
+            if Band.objects.filter( name = post_data['name'].title() ):
+                errors['duplicate_band'] = "Band already exists in database"
 
         # GENRE_REGEX = re.compile( r"^[a-zA-Z\-\'\s]{2,32}$" )
         # if not GENRE_REGEX.match( post_data['genre'] ) or not GENRE_REGEX.match( post_data['new_genre'] ):
         #     errors['invalid_genre'] = "Please enter a valid genre name"
 
-        try:
-            if int(post_data['founded']) < 1700 or int(post_data['founded']) > int( date.today().year ):
-                errors['invalid year'] = "Please enter a valid year"
-        except:
-            errors['no_year'] = "Please enter a year"
+        if (type == "update" and post_data['founded'] != "") or type=="create":
+            try:
+                if int(post_data['founded']) < 1700 or int(post_data['founded']) > int( date.today().year ):
+                    errors['invalid year'] = "Please enter a valid year"
+            except:
+                errors['no_year'] = "Please enter a year"
 
         return errors
+
 
 class Album_Manager(models.Manager):
 

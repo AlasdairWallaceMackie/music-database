@@ -21,7 +21,8 @@ def band_list(request):
 
 def show_band(request, id):
     context = {
-        'band': Band.objects.get(id = id)
+        'band': Band.objects.get(id = id),
+        'countries': countries
     }
     return render(request, 'show_band.html', context)
 
@@ -78,6 +79,11 @@ def delete_band(request, id):
 
     return redirect('/bands')
 
+def update_band(request, id):
+    if request.method=="POST":
+        print(f"Request to update band id: {id}")
+
+        return HttpResponse(f"<h2>Placeholder to update band id: {id}</h2>")
 
 def album_list(request):
     context = {
