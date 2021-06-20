@@ -33,47 +33,57 @@ $(document).ready(function(){
             </div>`
         )
 
+        $('.dropdown-toggle').prop("disabled", true)
+
         $('#cancel').click(function(){
             console.log("Album edit cancelled");
 
             $('#album-title').replaceWith(title);
             $('#album-release-date').replaceWith(date);
             $('#new-form-elements').remove();
+            $('.dropdown-toggle').prop("disabled", false)
         });
     });
 
-    if( $('#update-band-form').length ){
-        $('#update-band-form').children('label').remove();
 
-        $('#name').removeClass('form-control').addClass('form-control-lg').attr("placeholder", "New band name")
+
+
+    if( $('#update-band').length ){
+        $('#update-band').children('label').remove();
+
+        $('#name').removeClass('form-control').addClass('form-control-lg').attr("placeholder", "Change band name")
         $('#genre').removeClass('form-select').addClass('form-select-sm');
         $('#founded').removeClass('form-control').addClass('form-control-sm');
-        $('#country').removeClass('form-select').addClass('form-select-sm');
+        $('#country-field').removeClass('form-select').addClass('form-select-sm');
         $('#status').removeClass('form-select').addClass('form-select-sm');
     }
+
 
     $('#edit-band').click(function(){
         console.log("Trying to edit band")
         
         var band_info = $('#band-info').clone()
+        var update_band = $('#update-band').clone()
 
         $('span').empty();
 
-        $('h1').children('span').html($('#name'))
+        $('#band-name').children('span').html($('#name'))
         $('p:contains("Genre")').children('span').html($('#genre'))
         $('p:contains("Founded")').children('span').html($('#founded'))
-        $('p:contains("Country")').children('span').html($('#country'))
+        $('p:contains("Country:")').children('span').html($('#country-field'))
         $('p:contains("Status")').children('span').html($('#status'))
 
-        $('band-info').append('.btn')
+        $('#band-actions-button').hide()
 
-        // $('#band-info').replaceWith( $('#update-band').html() )
+        $('#update-band-form').append( $('#button-group') )
 
-        // $('#cancel').click(function(){
-        //     console.log("Band edit cancelled")
-            
-        //     $('form').first().replaceWith(band_info)
-        // })
+        $('#cancel').click(function(){
+            console.log("Cancelling band edit")
+            $('#band-info').replaceWith( band_info )
+            $('#update-band').replaceWith( update_band )
+            $('#band-actions-button').show()
+        });
     });
+
 
 });

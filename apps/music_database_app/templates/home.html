@@ -9,16 +9,16 @@
     {% include 'util/navbar.html' %}
 
     <main class="container d-flex justify-content-evenly">
-        <div id="newest-album-releases">
-            <h3>Newest Album Releases</h3>
+        <div id="newest-album-releases" class="container rounded bg-dark p-3 mx-3">
+            <h3 class="mb-3">Newest Album Releases</h3>
             <ul>
                 {% for album in newest_albums %}
-                <div class="container d-flex">
-                    <a href="/albums/{{album.id}}">
+                <div class="container rounded d-flex bg-secondary p-2 mb-3">
+                    <a href="/albums/{{album.id}}" class="me-3">
                         <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
                     </a>
-                    <div>
-                        {{album.title}} by <a href="/bands/{{album.band.id}}">{{album.band.name}}</a>
+                    <div class="my-auto">
+                        <h5>{{album.title}} by <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h5>
                         <br>
                         {{album.release_date}}
                     </div>
@@ -26,22 +26,22 @@
                 {% endfor %}
             </ul>
         </div>
-        <div id="recently-added-bands">
+        <div id="recently-added-bands" class="container rounded bg-dark p-3 mx-3">
             <h3>Recently Added Bands</h3>
             <ul>
                 {% for band in recent_bands %}
                     <li>
                         <a href="/bands/{{band.id}}">{{band.name}}</a>
                         <ul>
-                            <li><small><i>Uploaded by: </i><a href="/users/{{band.uploader_id}}">{{band.added_by.username}}</a> on {{band.created_at}}</small></li>
+                            <li>
+                                <small><i>Uploaded by: </i><a href="/users/{{band.uploader_id}}">{{band.added_by.username}}</a> on {{band.created_at}}</small>
+                            </li>
                         </ul>
                     </li>
                 {% endfor %}
             </ul>
         </div>
     </main>
-
-
 
 
     {% include 'util/scripts.html' %}

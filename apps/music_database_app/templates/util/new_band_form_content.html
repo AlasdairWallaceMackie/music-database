@@ -17,8 +17,8 @@
     <label class="form-label" for="founded">Year Founded:</label>
     <input class="form-control" type="number" name="founded" id="founded">
     <br>
-    <label class="form-label" for="country">Country:</label>
-    <select class="form-select" name="country" id="country">
+    <label class="form-label" for="country-field">Country:</label>
+    <select class="form-select" name="country" id="country-field">
         <option value="" selected disabled>Choose a country</option>
         {% for country in countries %}
             <option value="{{country.code}}">{{country.name}}</option>
