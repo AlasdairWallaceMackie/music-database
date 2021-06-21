@@ -8,25 +8,23 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container d-flex justify-content-evenly">
-        <div id="newest-album-releases" class="container rounded bg-dark p-3 mx-3">
+    <main class="container d-lg-flex justify-content-evenly">
+        <div id="newest-album-releases" class="container rounded bg-dark p-3 mx-lg-3 mb-3 mb-lg-0">
             <h3 class="mb-3">Newest Album Releases</h3>
-            <ul>
-                {% for album in newest_albums %}
-                <div class="container rounded d-flex bg-secondary p-2 mb-3">
-                    <a href="/albums/{{album.id}}" class="me-3">
-                        <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
-                    </a>
-                    <div class="my-auto">
-                        <h5>{{album.title}} by <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h5>
-                        <br>
-                        {{album.release_date}}
-                    </div>
+            {% for album in newest_albums %}
+            <div class="container rounded d-flex bg-secondary p-2 mb-3">
+                <a href="/albums/{{album.id}}" class="me-3">
+                    <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+                </a>
+                <div class="my-auto">
+                    <h5>{{album.title}} by <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h5>
+                    <br>
+                    {{album.release_date}}
                 </div>
-                {% endfor %}
-            </ul>
+            </div>
+            {% endfor %}
         </div>
-        <div id="recently-added-bands" class="container rounded bg-dark p-3 mx-3">
+        <div id="recently-added-bands" class="container rounded bg-dark p-3 mx-lg-3">
             <h3>Recently Added Bands</h3>
             <ul>
                 {% for band in recent_bands %}

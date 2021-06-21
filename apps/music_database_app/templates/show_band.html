@@ -58,7 +58,7 @@
     {% if request.session.current_username %}
         {% include 'util/delete_band_modal.html' %}
 
-        <div id="update-band" class="">
+        <div id="update-band" class="d-none">
             {% include 'util/new_band_form_content.html' %}
             <div id="button-group">
                 <button class="btn btn-warning" type="submit">Update</button>

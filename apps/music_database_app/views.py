@@ -119,17 +119,19 @@ def create_album(request):
             return redirect('/signin')
         
         errors = Album.objects.basic_validator(request.POST)
+        errors | Album.objects.files_validator(request.FILES)
         if errors:
             print("Errors found in form")
             for k,v in errors.items():
                 messages.error(request, v)
             return redirect(f'/bands/{band.id}')
 
-        try:
-            img = request.FILES['cover_art']
-        except:
-            messages.error(request, "Please upload cover art for this album")
-            return redirect(f'/bands/{band.id}')
+
+        # try:
+        #     img = request.FILES['cover_art']
+        # except:
+        #     messages.error(request, "Please upload cover art for this album")
+        #     return redirect(f'/bands/{band.id}')
         
         print("No errors found. Adding album to database")
 
@@ -154,7 +156,7 @@ def update_album(request, id):
             print("Album not found")
             return HttpResponse("<h1>Error: Album not found</h1>")
 
-        errors = Album.objects.update_validator(request.POST)
+        errors = Album.objects.basic_validator(request.POST, "update")
 
         if errors:
             print("Errors found when updating album")
