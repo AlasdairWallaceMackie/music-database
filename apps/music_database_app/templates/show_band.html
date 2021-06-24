@@ -25,16 +25,17 @@
                     </form>
                 {% endif %}
             </div>
-
-            <div id="band-actions-button" class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
-                <ul class="dropdown-menu">
-                    <li id="edit-band" class="dropdown-item pointer">Edit</li>
-                    {% if band.uploader_id == request.session.current_user_id %}
-                        <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-band-modal">Delete</li>
-                    {% endif %}
-                </ul>
-            </div>
+            {% if request.session.current_username %}
+                <div id="band-actions-button" class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+                    <ul class="dropdown-menu">
+                        <li id="edit-band" class="dropdown-item pointer">Edit</li>
+                        {% if band.uploader_id == request.session.current_user_id %}
+                            <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-band-modal">Delete</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
 
         <div class="container rounded bg-dark p-4 mx-lg-3">

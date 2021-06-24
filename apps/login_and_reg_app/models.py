@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from datetime import date, datetime
 import re
 
@@ -39,7 +40,20 @@ class User(models.Model):
     email = models.EmailField(max_length=64)
     password = models.TextField()
     ##Foreign Keys
+    # Band.added_by
+    # Album.added_by
+    # Band.last_edited_by
+    # Album.last_edited_by
         
     objects = User_Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def total_contributions(self):
+        return Count(self.added_bands) + Count(self.added_albums)
+
+    def number_of_bands_added(self):
+        return Count(self.added_bands)
+
+    def number_of_albums_added(self):
+        return Count(self.added_albums)

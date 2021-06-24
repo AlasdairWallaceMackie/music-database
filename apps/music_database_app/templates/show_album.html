@@ -9,7 +9,7 @@
     {% include 'util/navbar.html' %}
 
     <main class="container d-flex justify-content-evenly">
-        <form id="update-album-form" action="/albums/{{album.id}}/update" method="POST">
+        <form id="update-album-form" action="/albums/{{album.id}}/update" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <h1 id="album-title">{{album.title}}</h1>
             <h3>By <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h3>
