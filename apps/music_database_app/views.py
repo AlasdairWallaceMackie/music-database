@@ -8,8 +8,8 @@ from django_countries import countries
 
 def home(request):
     context = {
-        'recent_bands': Band.objects.all().order_by('-created_at')[:3],
-        'newest_albums': Album.objects.all().order_by('-release_date')[:3],
+        'recent_bands': Band.objects.all().order_by('-created_at')[:6],
+        'newest_albums': Album.objects.all().order_by('-release_date')[:4],
     }
     return render(request, 'home.html', context)
 
@@ -38,7 +38,7 @@ def create_band(request):
         print("Creating band, checking for errors")
         errors = Band.objects.basic_validator(request.POST)
         if errors:
-            print("Errors found")
+            print("Errors found when trying to create band")
             for k,v in errors.items():
                 messages.error(request, v)
             return redirect('/bands/new')
@@ -126,12 +126,7 @@ def create_album(request):
                 messages.error(request, v)
             return redirect(f'/bands/{band.id}')
 
-
-        # try:
-        #     img = request.FILES['cover_art']
-        # except:
-        #     messages.error(request, "Please upload cover art for this album")
-        #     return redirect(f'/bands/{band.id}')
+        img = request.FILES['cover_art']
         
         print("No errors found. Adding album to database")
 
@@ -156,7 +151,11 @@ def update_album(request, id):
             print("Album not found")
             return HttpResponse("<h1>Error: Album not found</h1>")
 
-        errors = Album.objects.basic_validator(request.POST, "update")
+        errors = {}
+        if request.POST['title'] != '':
+            errors | Album.objects.validate_title(request.POST['title'])
+        if request.POST['release_date'] != '':
+            errors | Album.objects.validate_release_date(request.POST['release_date'])        
 
         if errors:
             print("Errors found when updating album")
@@ -164,21 +163,27 @@ def update_album(request, id):
                 messages.error(request, v)
             return redirect(f'/albums/{id}')
         
-        print(f"Title: {request.POST['title']}")
-        print(f"Date: {request.POST['release_date']}")
-        print(f"Artwork: {request.FILES}")
+        # print(f"Title: {request.POST['title']}")
+        # print(f"Date: {request.POST['release_date']}")
+        # print(f"Artwork: {request.FILES}")
         
         changed = False
 
         if request.POST['title'] != "":
-            print("********************Trigger1")
+            print("Updating album title")
             album_to_update.title = request.POST['title']
             changed = True
 
         if request.POST['release_date'] != "":
-            print("********************Trigger2")
+            print("Updating album release date")
             album_to_update.release_date = request.POST['release_date']
             changed = True
+
+        if request.FILES['cover_art'] != "":
+            print("Updating album cover art")
+            album_to_update.cover_art = request.FILES['cover_art']
+            changed = True
+
 
         if changed == True:
             album_to_update.last_edited_by = User.objects.get(id = request.session['current_user_id'])
@@ -186,17 +191,40 @@ def update_album(request, id):
             messages.success(request, "Album info updated!")
         else:
             messages.warning(request, "No changes were made")
-        return redirect(f'/albums/{id}')
 
-    return HttpResponse(f"Placeholder to update album id: {id}")
+    return redirect(f'/albums/{id}')
+
 
 def delete_album(request, id):
-    return HttpResponse(f"Placeholder to delete album ID: {id}")
+    if request.method=="POST":
+        print("Deleting album...")
+        try:
+            album_to_delete = Album.objects.get(id = id)
+        except:
+            return HttpResponse(f"<h3>Error: The album you are trying to delete does not exist in the database</h3>")
+        
+        if album_to_delete.added_by.id != request.session['current_user_id']:
+            messages.error(request, "You do not have rights to delete this album")
+        else:
+            album_title = album_to_delete.title
+            band_id = album_to_delete.band.id
+            album_to_delete.delete()
+            print("Album deletion successfull")
+            messages.success(request, f'Successfully deleted "{album_title}"')
+    
+    return redirect(f'/bands/{band_id}')
 
 def user_list(request):
     context = {
-        'users': User.objects.all()
+        'newest_users': User.objects.order_by("-created_at")[:10],
+        'top_contributors': User.objects.annotate(
+            total_contributions = ( Count('added_bands') + Count('added_albums') )
+        ).filter(
+            total_contributions__gt=0
+        ).order_by( '-total_contributions' )[:10],
     }
+
+
     return render(request, 'user_list.html', context)
 
 def show_user(request, id):
@@ -220,10 +248,12 @@ def show_user(request, id):
 
 def create_user(request):
     if request.method == "POST":
+        print("Creating user...")
         errors = User.objects.basic_validator(request.POST)
 
         if errors:
             for k,v in errors.items():
+                print("Errors found when creating user")
                 messages.error(request, v)
             return redirect('/register')
 
@@ -232,9 +262,12 @@ def create_user(request):
             email = request.POST['email'],
             password = bcrypt.hashpw( request.POST['password'].encode(), bcrypt.gensalt() ).decode()
         )
+        print("New user successfully created!")
 
+        print("Logging in as new user...")
         request.session['current_user_id'] = new_user.id
         request.session['current_username'] = new_user.username
+        messages.success(request, "Account created!")
 
     return redirect(f'/users/{new_user.id}')
 

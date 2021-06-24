@@ -8,22 +8,30 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container">
-        <h1>User List</h1>
-        <table>
-            <thead>
-                <th>ID</th>
-                <th>Username</th>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{user.id}}</td>
-                        <td>{{user.username}}</td>
-                    </tr>
+    <main class="container d-lg-flex justify-content-between col-lg-10">
+        <div class="container rounded bg-dark p-3 me-3">
+            <h2>Our Top Contributors</h2>
+            <ol>
+                {% for user in top_contributors %}
+                    <li>
+                        <a href="users/{{user.id}}">{{user.username}}</a>
+                        <ul><li>{{user.total_contributions}}<i> submissions</i></li></ul>
+                    </li>
                 {% endfor %}
-            </tbody>
-        </table>
+            </ol>
+        </div>
+
+        <div class="container rounded bg-dark p-3">
+            <h2>Newest Members</h2>
+            <ul>
+                {% for user in newest_users %}
+                    <li>
+                        <a href="/users/{{user.id}}">{{user.username}}</a>
+                        <ul><li>Joined: {{user.created_at}}</li></ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </main>
 
 

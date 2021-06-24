@@ -27,7 +27,7 @@
                     <tr>
                         <td><a href="/bands/{{band.id}}">{{band.name}}</a></td>
                         <td>{{band.genre}}</td>
-                        <td><img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></td>
+                        <td class="text-center text-lg-start"><img src="{{band.country.flag}}" alt="Flag of {{band.country.name}}" title="{{band.country.name}}"></td>
                         <td>{{band.founded}}</td>
                         <td>{{band.get_status}}</td>
                         <td><i>{{band.albums.count}} album(s)</i></td>

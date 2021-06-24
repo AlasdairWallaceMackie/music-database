@@ -28,8 +28,10 @@ class Band_Manager(models.Manager):
 
         if (type == "update" and post_data['founded'] != "") or type=="create":
             try:
-                if int(post_data['founded']) < 1700 or int(post_data['founded']) > int( date.today().year ):
+                if int(post_data['founded']) < 1700:
                     errors['invalid year'] = "Please enter a valid year"
+                if int(post_data['founded']) > int( date.today().year ):
+                    errors['future_year'] = "Year cannot be in the future"
             except:
                 errors['no_year'] = "Please enter a year"
 
@@ -37,7 +39,7 @@ class Band_Manager(models.Manager):
             if 'country' not in post_data:
                 errors['no_country'] = "Please enter a country"
 
-        if (type == "update" and post_data['country'] != "") or type=="create":
+        if (type == "update" and post_data['status'] != "") or type=="create":
             try:
                 if int(post_data['status']) < 0 or int(post_data['status']) > 2:
                     errors['invalid_status'] = "Invalid Status"
@@ -45,18 +47,21 @@ class Band_Manager(models.Manager):
                 errors['no_status'] = "Please enter a status"
         
         return errors
+    
+    #def name_validator(self, post_data):
+    #def genre_validator(self, post_data):
+    #def country_validator(self, post_data):
+    #def name_validator(self, post_data):
 
 
 class Album_Manager(models.Manager):
-
     def basic_validator(self, post_data):
         errors = {}
 
-        if len(post_data['title']) < 1:
+        try:
+            errors | self.validate_title(post_data['title'])
+        except:
             errors['no_title'] = "Please add a title"
-
-        if len(post_data['title']) > 128:
-            errors['title_too_long'] = "Title is too long"
 
         if 'band' not in post_data:
             errors['no_band'] = "No band associated with album"
@@ -64,10 +69,10 @@ class Album_Manager(models.Manager):
         if not Band.objects.filter(id = post_data['band']):
             errors['band_not_found'] = "Associated band not found"
 
-        if not post_data['release_date']:
-            errors['no_release_date'] = "Please enter a full release date (Month, day, year)"
-        elif datetime.strptime(post_data['release_date'], '%Y-%m-%d').date() > date.today():
-            errors['release_date_in_future'] = "Release date cannot be in the future"
+        try:
+            errors | self.validate_release_date(post_data['release_date'])
+        except:
+            errors['no_release_date'] = "Please enter a release date"
 
         if not post_data['added_by_id']:
             errors['no_uploader'] = "No uploader associated"
@@ -85,10 +90,26 @@ class Album_Manager(models.Manager):
 
         return errors
     
-    # def validate_title()
-    # def validate_band()
-    # def validate_release_date()
-    # def validate_added_by_id()
+    def validate_title(self, post_data):
+        errors = {}
+
+        if len(post_data) < 1:
+            errors['no_title'] = "Please add a title"
+
+        if len(post_data) > 128:
+            errors['title_too_long'] = "Title is too long"
+
+        return errors
+
+    def validate_release_date(self, post_data):
+        errors = {}
+        try:
+            if datetime.strptime(post_data, '%Y-%m-%d').date() > date.today():
+                errors['release_date_in_future'] = "Release date cannot be in the future"
+        except:
+            errors['no_release_date'] = "Please enter a release date"
+
+        return errors
 
 
 class Band(models.Model):
