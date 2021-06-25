@@ -1,7 +1,11 @@
 $(document).ready(function(){
     console.log("Script linked")
 
-    $('#messages').delay(2250).fadeOut();
+    $('#messages').delay(1750).fadeOut();
+
+    console.log(window.location.pathname)
+    $('nav').find(`a[href="${window.location.pathname}"]`).addClass("active")
+
 
     $('#edit-album').click(function(){
         console.log("Editing album")
@@ -45,9 +49,7 @@ $(document).ready(function(){
         });
     });
 
-
-
-
+    
     if( $('#update-band').length ){
         $('#update-band').children('label').remove();
 
@@ -65,13 +67,29 @@ $(document).ready(function(){
         var band_info = $('#band-info').clone()
         var update_band = $('#update-band').clone()
 
+        var name = $('#band-name').text()
+        var genre = $('p:contains("Genre")').children('span').text()
+        var founded = $('p:contains("Founded")').children('span').text()
+        var country = $('p:contains("Country:")').children('span').text()
+        var status = $('p:contains("Status")').children('span').text()
+
         $('span').empty();
+        $(`[selected|=true]`).remove()
 
         $('#band-name').children('span').html($('#name'))
+            $('#band-name').find('input').val(name)
+
         $('p:contains("Genre")').children('span').html($('#genre'))
+            $(`[value|=${genre}]`).attr("selected", true)
+            
         $('p:contains("Founded")').children('span').html($('#founded'))
+            $('p:contains("Founded")').find('input').val(founded)
+
         $('p:contains("Country:")').children('span').html($('#country-field'))
+            $(`option:contains(${country})`).attr("selected", true)
+
         $('p:contains("Status")').children('span').html($('#status'))
+            $(`option:contains(${status})`).attr("selected", true)
 
         $('#band-actions-button').hide()
 

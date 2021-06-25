@@ -15,7 +15,7 @@ def home(request):
 
 def band_list(request):
     context = {
-        'bands': Band.objects.all()
+        'bands': Band.objects.order_by("name")
     }
     return render(request, 'band_list.html', context)
 
@@ -36,6 +36,7 @@ def new_band(request):
 def create_band(request):
     if request.method == "POST":
         print("Creating band, checking for errors")
+        print(request.POST)
         errors = Band.objects.basic_validator(request.POST)
         if errors:
             print("Errors found when trying to create band")
@@ -47,7 +48,7 @@ def create_band(request):
 
         print("No errors found, adding band to database")
         new_band = Band.objects.create(
-            name = request.POST['name'],
+            name = request.POST['name'].title(),
             genre = request.POST['genre'],
             founded = request.POST['founded'],
             country = request.POST['country'],
@@ -73,7 +74,7 @@ def delete_band(request, id):
                 messages.warning(request, f"Band '{name}' deleted")
                 print(f"Band <'{name}'> successfully deleted")
             else:
-                messages.error("You are not the original uploader of this band and you are not authorized to delete it")
+                messages.error("You are not the original uploader of this band and are not authorized to delete it")
         except:
             print("Deletion failed: Band not found")
 
@@ -81,13 +82,63 @@ def delete_band(request, id):
 
 def update_band(request, id):
     if request.method=="POST":
-        print(f"Request to update band id: {id}")
+        if 'current_user_id' not in request.session:
+            messages.warning(request, "You need to be logged in to make edits")
+            return redirect("/signin")
+        else:
+            print(f"Request to update band id: {id}")
 
-        return HttpResponse(f"<h2>Placeholder to update band id: {id}</h2>")
+            try:
+                band_to_update = Band.objects.get(id = id)
+            except:
+                messages.error(request, "Band not found")
+                return redirect('/bands')
+
+            errors = {}
+            changed = False
+
+            if request.POST['name'] != band_to_update.name:
+                errors = errors | Band.objects.name_validator(request.POST['name'])
+                print("Name changed")
+                changed = True
+            if request.POST['genre'] != band_to_update.genre:
+                errors = errors | Band.objects.genre_validator(request.POST['genre'])
+                print("Genre changed")
+                changed = True
+            if int(request.POST['founded']) != band_to_update.founded:
+                errors = errors | Band.objects.founded_validator(request.POST['founded'])
+                print("Year changed")
+                changed = True
+            if request.POST['country'] != band_to_update.country:
+                errors = errors | Band.objects.country_validator(request.POST['country'])
+                print("Country changed")
+                changed = True
+            if int(request.POST['status']) != band_to_update.status:
+                errors = errors | Band.objects.status_validator(request.POST['status'])
+                print("Status changed")
+                changed = True
+        
+            if errors:
+                for k,v in errors.items():
+                    messages.error(request, v)
+            elif changed==True:
+                band_to_update.name = request.POST['name']
+                band_to_update.genre = request.POST['genre']
+                band_to_update.founded = request.POST['founded']
+                band_to_update.country = request.POST['country']
+                band_to_update.status = request.POST['status']
+                band_to_update.last_edited_by = User.objects.get(id = request.session['current_user_id'])
+                band_to_update.save()
+
+                messages.success(request, "Band successfully updated!")
+            else:
+                messages.warning(request, "No changes were made")
+
+    return redirect(f"/bands/{id}")
 
 def album_list(request):
     context = {
-        'albums': Album.objects.all()
+        'albums': Album.objects.order_by("title")
     }
     return render(request, 'album_list.html', context)
 
@@ -153,9 +204,9 @@ def update_album(request, id):
 
         errors = {}
         if request.POST['title'] != '':
-            errors | Album.objects.validate_title(request.POST['title'])
+            errors = errors | Album.objects.validate_title(request.POST['title'])
         if request.POST['release_date'] != '':
-            errors | Album.objects.validate_release_date(request.POST['release_date'])        
+            errors = errors | Album.objects.validate_release_date(request.POST['release_date'])        
 
         if errors:
             print("Errors found when updating album")
@@ -179,7 +230,7 @@ def update_album(request, id):
             album_to_update.release_date = request.POST['release_date']
             changed = True
 
-        if request.FILES['cover_art'] != "":
+        if 'cover_art' in request.FILES:
             print("Updating album cover art")
             album_to_update.cover_art = request.FILES['cover_art']
             changed = True
