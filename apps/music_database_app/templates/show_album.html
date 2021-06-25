@@ -8,30 +8,35 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container d-flex justify-content-evenly">
-        <form id="update-album-form" action="/albums/{{album.id}}/update" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h1 id="album-title">{{album.title}}</h1>
-            <h3>By <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h3>
-            <br>
-            {% if request.session.current_username %}
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
-                    <ul class="dropdown-menu">
-                        <li id="edit-album" class="dropdown-item pointer">Edit</li>
-                        <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-album-modal">Delete</li>
-                    </ul>
-                </div>
-            {% endif %}
-            <br>
-            <p id="album-release-date">Released on: {{album.release_date}}</p>
-            <br>
-            <small><i>Added by: </i><a href="/users/{{album.added_by.id}}">{{album.added_by.username}}</a><i> on {{album.created_at}}</i></small>
-            <br>
-            <small><i>Last modified by: </i><a href="/users/{{album.last_edited_by.id}}">{{album.last_edited_by.username}}</a><i> on {{album.updated_at}}</i></small>
-        </form>
-        <div id="album-artwork">
-            <img class="d-block" style="height: 400px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+    <main class="container d-lg-flex justify-content-evenly">
+        <div>
+            <form id="update-album-form" action="/albums/{{album.id}}/update" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h1 id="album-title">{{album.title}}</h1>
+                <h3>By <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h3>
+                <br>
+                {% if request.session.current_username %}
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+                        <ul class="dropdown-menu">
+                            <li id="edit-album" class="dropdown-item pointer">Edit</li>
+                            <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-album-modal">Delete</li>
+                        </ul>
+                    </div>
+                {% endif %}
+                <br>
+                <p id="album-release-date">Released on: {{album.release_date}}</p>
+            </form>
+            <div>
+                <br>
+                <small><i>Added by: </i><a href="/users/{{album.added_by.id}}">{{album.added_by.username}}</a><i> on {{album.created_at}}</i></small>
+                <br>
+                <small><i>Last modified by: </i><a href="/users/{{album.last_edited_by.id}}">{{album.last_edited_by.username}}</a><i> on {{album.updated_at}}</i></small>
+            </div>
+        </div>
+        <div id="album-artwork" class="mt-3">
+            <img class="d-sm-none img-fluid" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+            <img class="d-none d-sm-block" style="height: 400px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
         </div>
     </main>
 

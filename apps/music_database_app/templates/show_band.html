@@ -12,11 +12,11 @@
 
         <div class="container rounded bg-dark p-4 mx-lg-3 mb-5 mb-lg-0">
             <div id="band-info">
-                <h1 id="band-name"><span>{{band.name}}</span></h1>
                 {% if request.session.current_username %}
                     <form id="update-band-form" class="container bg-dark" action="/bands/{{band.id}}/update" method="POST">
                     {% csrf_token %}
                 {% endif %}
+                <h1 id="band-name"><span>{{band.name}}</span></h1>
                 <p>Genre: <span>{{band.genre}}</span></p>
                 <p>Year Founded: <span>{{band.founded}}</span></p>
                 <p>Country: <span>{{band.country.name}}<img class="ms-2" src="{{band.country.flag}}" alt="Flag of {{band.country.name}}"></span></p>
@@ -36,6 +36,12 @@
                     </ul>
                 </div>
             {% endif %}
+            <div>
+                <br>
+                <small><i>Added by: </i><a href="/users/{{band.added_by.id}}">{{band.added_by.username}}</a><i> on {{band.created_at}}</i></small>
+                <br>
+                <small><i>Last modified by: </i><a href="/users/{{band.last_edited_by.id}}">{{band.last_edited_by.username}}</a><i> on {{band.updated_at}}</i></small>
+            </div>
         </div>
 
         <div class="container rounded bg-dark p-4 mx-lg-3">
@@ -52,6 +58,9 @@
                         <p>{{album.release_date}}</p>
                     </div>
                 </div>
+            {% empty %}
+                <br><br>
+                <i>No albums added yet!</i>
             {% endfor %}
         </div>
     </main>

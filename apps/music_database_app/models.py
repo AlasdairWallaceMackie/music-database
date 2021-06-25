@@ -3,55 +3,100 @@ from django.db import models
 from datetime import date, datetime
 
 from django_countries.fields import CountryField
+from django_countries import countries
 from ..login_and_reg_app.models import *
 import re
 
 class Band_Manager(models.Manager):
-    def basic_validator(self, post_data, type="create"):
+    def basic_validator(self, post_data):
         errors = {}
 
-        if (type == "update" and post_data['name'] != "") or type=="create":
-            if len( post_data['name'] ) < 1 or len( post_data['name'] )> 128:
-                errors['name_length'] = "Invalid band name length"
+        try:
+            errors = errors | self.name_validator(post_data['name'])
+        except:
+            errors['no_name'] = "Please enter a name for this band"
+        print(f"DATA: {errors}")
+        try:
+            errors = errors | self.genre_validator(post_data['genre'])
+        except:
+            errors['no_genre'] = "Please enter a valid genre"
+        print(f"DATA: {errors}")
+        try:
+            errors = errors | self.founded_validator(post_data['founded'])
+        except:
+            errors['no_year'] = "Please enter a year"
+        print(f"DATA: {errors}")
+        try:
+            errors = errors | self.country_validator(post_data['country'])
+        except:
+            errors['no_country'] = "Please enter a country"
+        print(f"DATA: {errors}")
+        try:
+            errors = errors | self.status_validator(post_data['status'])
+        except:
+            errors['no_status'] = "Please enter a status"
 
-            if Band.objects.filter( name = post_data['name'].title() ):
-                errors['duplicate_band'] = "Band already exists in database"
-
-
-        if (type == "update" and 'genre' in post_data ) or type=="create":
-            if 'genre' not in post_data:
-                errors['no_genre'] = "Please choose a genre"
-            else:
-                GENRE_REGEX = re.compile( r"^[a-zA-Z\-\'\s]{2,32}$" )
-                if not GENRE_REGEX.match( post_data['genre'] ):
-                    errors['invalid_genre'] = "Please enter a valid genre name"
-
-        if (type == "update" and post_data['founded'] != "") or type=="create":
-            try:
-                if int(post_data['founded']) < 1700:
-                    errors['invalid year'] = "Please enter a valid year"
-                if int(post_data['founded']) > int( date.today().year ):
-                    errors['future_year'] = "Year cannot be in the future"
-            except:
-                errors['no_year'] = "Please enter a year"
-
-        if (type == "update" and 'country' in post_data) or type=="create":
-            if 'country' not in post_data:
-                errors['no_country'] = "Please enter a country"
-
-        if (type == "update" and post_data['status'] != "") or type=="create":
-            try:
-                if int(post_data['status']) < 0 or int(post_data['status']) > 2:
-                    errors['invalid_status'] = "Invalid Status"
-            except:
-                errors['no_status'] = "Please enter a status"
+        print(f"FINAL DATA: {errors}")
         
         return errors
-    
-    #def name_validator(self, post_data):
-    #def genre_validator(self, post_data):
-    #def country_validator(self, post_data):
-    #def name_validator(self, post_data):
+
+    ####################################
+
+    def name_validator(self, post_data):
+        errors = {}
+        # print("TRIGGER******************************")
+        # print(f"DATA: {post_data}")
+        if len(post_data) < 1:
+            print("NO NAME")
+            errors['no_name'] = "Please enter a name for this band"
+
+        if len(post_data) > 128:
+            errors['name_too_long'] = "Name is too long"
+
+        if Band.objects.filter( name = post_data.title() ):
+            errors['duplicate_band'] = "Band already exists in database"
+
+
+        # print(f"ERRORS: {errors}")
+        return errors
+
+    def genre_validator(self, post_data):
+        errors = {}
+
+        GENRE_REGEX = re.compile( r"^[A-Z][a-zA-Z\-\'\s]{2,32}$" )
+        if not GENRE_REGEX.match( post_data ):
+            errors['invalid_genre'] = "Please enter a valid genre name"
+
+        return errors
+
+    def founded_validator(self, post_data):
+        errors = {}
+
+        try:
+            if int(post_data) < 1700:
+                errors['invalid year'] = "Please enter a valid year"
+            if int(post_data) > int( date.today().year ):
+                errors['future_year'] = "Year cannot be in the future"
+        except:
+            errors['invalid year'] = "Please enter a valid year"
+
+        return errors
+
+    def country_validator(self, post_data):
+        errors = {}
+
+        if post_data not in countries:
+            errors['invalid_country'] = "Please choose a valid country"
+
+        return errors
+
+    def status_validator(self, post_data):
+        errors = {}
+
+        if int(post_data) < 0 or int(post_data) > 2:
+            errors['invalid_status'] = "Invalid Status"
+
+        return errors
 
 
 class Album_Manager(models.Manager):
@@ -59,7 +104,7 @@ class Album_Manager(models.Manager):
         errors = {}
 
         try:
-            errors | self.validate_title(post_data['title'])
+            errors = errors | self.validate_title(post_data['title'])
         except:
             errors['no_title'] = "Please add a title"
 
@@ -70,7 +115,7 @@ class Album_Manager(models.Manager):
             errors['band_not_found'] = "Associated band not found"
 
         try:
-            errors | self.validate_release_date(post_data['release_date'])
+            errors = errors | self.validate_release_date(post_data['release_date'])
         except:
             errors['no_release_date'] = "Please enter a release date"
 
@@ -139,7 +184,7 @@ class Band(models.Model):
 
     def get_status(self):
         statuses = {
-            0: "Inactive",
+            0: "Split-Up",
             1: "Hiatus",
             2: "Active"
         }
