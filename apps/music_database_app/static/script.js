@@ -6,6 +6,16 @@ $(document).ready(function(){
     console.log(window.location.pathname)
     $('nav').find(`a[href="${window.location.pathname}"]`).addClass("active")
 
+    $('.needs-validation').submit(function(event){
+        
+        if ( !this.checkValidity() ){
+            event.preventDefault();
+            event.stopPropagation()
+        }
+
+        $(this).addClass('was-validated')
+    });
+
 
     $('#edit-album').click(function(){
         console.log("Editing album")
@@ -102,6 +112,65 @@ $(document).ready(function(){
             $('#band-actions-button').show()
         });
     });
+
+
+    $('.rating-star').hover(function(){ //Hover in
+        var hovered_value = $(this).attr('value')
+
+        //Empty stars
+        $('.rating-star').each(function(){
+                $(this).removeClass('bi-star-fill').addClass('bi-star')
+        });
+
+        //Fill all stars up to and including the hovered star
+        $('.rating-star').each(function(){
+            if ( parseInt( $(this).attr("value") ) <= hovered_value)
+                $(this).removeClass('bi-star').addClass('bi-star-fill')
+        });
+    },
+    function(){ //Hover out        
+        emptyStars()
+        
+        $('.rating-star').each(function(){
+            var current_rating = $('#rating').val()
+            var this_star_rating = $(this).attr('value')
+
+            if( this_star_rating <= current_rating)
+                $(this).removeClass('bi-star').addClass('bi-star-fill')
+        });
+    });
+
+    $('.rating-star').mousedown(function(){
+        new_value = $(this).attr('value')
+        $('#rating').val(new_value)
+        console.log("User rating changed to: " + new_value)
+
+        //Darkening effect feedback when clicked
+        $(this).parent().children('.bi-star-fill').css("color", "#AB631E")
+    });
+    $('.rating-star').mouseup(function(){
+        console.log("Mouseup")
+        $('.rating-star').each(function(){
+            $(this).css("color","")
+        });
+    });
+
+    $('#cancel-rating').click(function(){
+        $('#rating').val("0");
+        emptyStars();
+    })
+
+    function emptyStars(){
+        $('.rating-star').each(function(){
+            $(this).removeClass('bi-star-fill').addClass('bi-star')
+        });
+    }
+    function fillStars(){
+        $('.rating-star').each(function(){
+            $(this).removeClass('bi-star').addClass('bi-star-fill')
+        });
+    }
+
 
 
 });

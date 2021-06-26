@@ -14,6 +14,7 @@ urlpatterns = [
     path('albums/create', views.create_album),
     path('albums/<int:id>/destroy', views.delete_album),
     path('albums/<int:id>/update', views.update_album),
+    path('albums/<int:id>/rate', views.create_rating),
     path('users', views.user_list),
     path('users/<int:id>', views.show_user),
     path('users/create', views.create_user),

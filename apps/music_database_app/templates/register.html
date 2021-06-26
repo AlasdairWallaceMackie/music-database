@@ -9,21 +9,25 @@
     {% include 'util/navbar.html' %}
 
     <main>
-        <fieldset class="container rounded bg-dark col-md-6 col-lg-4 p-3 mx-auto">
+        <fieldset class="container rounded bg-dark col-md-6 col-lg-4 py-3 px-5 mx-auto">
             <legend>Register a New Account</legend>
-            <form action="/users/create" method="POST">
+            <form action="/users/create" method="POST" class="needs-validation" novalidate>
                 {% csrf_token %}
                 <label class="form-label" for="username">Username:</label>
-                <input class="form-control" type="text" name="username" id="username">
+                <input required minlength="3" maxlength="32" class="form-control" type="text" name="username" id="username">
+                <div class="invalid-feedback">Username must be between 3 and 32 characters</div>
                 <br>
                 <label class="form-label" for="email">Email:</label>
-                <input class="form-control" type="text" name="email" id="email">
+                <input required class="form-control" type="email" name="email" id="email">
+                <div class="invalid-feedback">Please enter a valid email address</div>
                 <br>
                 <label class="form-label" for="password">Password</label>
-                <input class="form-control" type="password" name="password" id="password">
+                <input required minlength="8" class="form-control" type="password" name="password" id="password">
+                <div class="invalid-feedback">Password must be at least 8 characters long</div>
                 <br>
                 <label class="form-label" for="confirm">Confirm:</label>
-                <input class="form-control" type="password" name="confirm" id="confirm">
+                <input required class="form-control" type="password" name="confirm" id="confirm">
+                <div class="invalid-feedback">Please confirm your password</div>
                 <br>
                 <button class="btn btn-success" type="submit">Register</button>
             </form>

@@ -14,18 +14,42 @@
                 {% csrf_token %}
                 <h1 id="album-title">{{album.title}}</h1>
                 <h3>By <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h3>
-                <br>
+                <p id="album-release-date" class="fs-5">Released on: {{album.release_date}}</p>
+                <div id="avg-rating" value="{{album.rating_avg}}">
+                    {% if album.rating_avg != 0 %}
+                        <div>
+                            Stars go here
+                        </div>
+                        <p>Average rating: {{album.rating_avg}}</p>
+                        <i>Rated by {{album.ratings.count}} users</i>
+                    {% else %}
+                        <div id="no-rating" class="text-light fs-2 position-relative">
+                            <i class="bi-star"></i>
+                            <i class="bi-star"></i>
+                            <i class="bi-star"></i>
+                            <i class="bi-star"></i>
+                            <i class="bi-star"></i>
+                        </div>
+                        <p class="text-light fs-5">No ratings yet! 
+                            {% if request.session.current_username %}
+                                <span class="fs-6 text-success pointer" data-bs-toggle="modal" data-bs-target="#rate-album-modal">Be the first</span>
+                            {% else %}
+                                <a class="fs-6" href="/signin">Log in to rate</a>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
                 {% if request.session.current_username %}
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
                         <ul class="dropdown-menu">
+                            <li class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#rate-album-modal">Rate</li>
                             <li id="edit-album" class="dropdown-item pointer">Edit</li>
                             <li class="dropdown-item text-danger pointer" data-bs-toggle="modal" data-bs-target="#delete-album-modal">Delete</li>
                         </ul>
                     </div>
                 {% endif %}
                 <br>
-                <p id="album-release-date">Released on: {{album.release_date}}</p>
             </form>
             <div>
                 <br>
@@ -42,6 +66,7 @@
 
     {% if request.session.current_username %}
         {% include 'util/delete_album_modal.html' %}
+        {% include 'util/rate_album_modal.html' %}
     {% endif %}
 
     {% include 'util/scripts.html' %}

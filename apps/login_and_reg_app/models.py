@@ -17,19 +17,19 @@ class User_Manager(models.Manager):
 
         if User.objects.filter( email = post_data['email'].lower() ):
             print("Duplicate email found")
-            errors['duplicate_email'] = "Email is already in use"
+            errors['duplicate_email'] = f"Email '{post_data['email']}' is already in use"
         
         if len(post_data['username']) < 3 or len(post_data['username']) > 32:
             errors['username_length'] = "Username must be between 3 and 32 characters"
 
         if User.objects.filter( username = post_data['username'].lower() ):
-            errors['duplicate_username'] = "Username already exists"
+            errors['duplicate_username'] = f"Username '{post_data['username']}' already exists"
 
         if len(post_data['password']) < 8:
             errors['short_password'] = "Password must be at least 8 characters"
 
         if post_data['password'] != post_data['confirm']:
-            errors['no_match'] = "Password confirmation must match"
+            errors['no_match'] = "Passwords didn't match"
 
         return errors
 
@@ -42,6 +42,7 @@ class User(models.Model):
     # Album.added_by
     # Band.last_edited_by
     # Album.last_edited_by
+    # ratings
         
     objects = User_Manager()
     created_at = models.DateTimeField(auto_now_add=True)
