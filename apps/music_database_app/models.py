@@ -157,6 +157,21 @@ class Album_Manager(models.Manager):
         return errors
 
 
+class Rating_Manager(models.Manager):
+    def basic_validator(self, post_data):
+        MAX_RATING = 5
+        errors = {}
+
+        if int(post_data['rating']) < 0 or int(post_data['rating']) > MAX_RATING:
+            errors["invalid_rating_value"] = f"Rating can only be between 1 and {MAX_RATING}"
+
+        #! CHECK TO MAKE SURE SINGLE USER DOESN'T RATE MORE THAN ONCE
+
+        return errors
+
+#########################
+#########################
+
 class Band(models.Model):
     name = models.CharField(max_length=128)
     genre = models.CharField(max_length=32)
@@ -190,9 +205,6 @@ class Band(models.Model):
         }
         return f"{statuses[self.status]}"
 
-
-
-
 class Album(models.Model):
     title = models.CharField(max_length=128)
     band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="albums")
@@ -201,7 +213,8 @@ class Album(models.Model):
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="added_albums")
     last_edited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="edited_albums")
     
-    #FK: songs
+    ##Foreign Keys:
+    # ratings 
     objects = Album_Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -209,33 +222,53 @@ class Album(models.Model):
     def __repr__(self):
         return f"< Album ID: {self.id} | {self.title} by {self.band.name}>"
 
-    def song_list(self):
-        list = []
-        for song in self.songs:
-            list.append(song)
-        
-        sorted = False
-        while(sorted == False and len(list) > 1):
-            for i in range( len(list)-1 ):
-                sorted = True
-                if list[i].track_number > list[i+1].track_number:
-                    list[i], list[i+1] = list[i+1], list[i]
-                    sorted = False
+    def rating_avg(self):
+        sum = 0
+        for rating in self.ratings.all():
+            sum += rating.value
+        # avg = float( sum / )
+        return round( float( sum / self.ratings.count() ), 2)
 
-        return list
+    def get_user_rating(self, user):
+        for rating in self.ratings.all():
+            if rating.user == user:
+                return rating.value
+        return 0
 
-    def genre(self):
-        return self.band.genre
+class Rating(models.Model):
+    value = models.IntegerField()
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="ratings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ratings")
 
-class Song(models.Model):
-    title = models.CharField(max_length=128)
-    length = models.IntegerField() #In Seconds
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="songs")
-    track_number = models.IntegerField()
-    band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="songs")
-
+    objects = Rating_Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def format_length(self):
-        return f"{ int(self.length / 60) }:{ self.length % 60 }"
+
+    # def song_list(self):
+    #     list = []
+    #     for song in self.songs:
+    #         list.append(song)
+        
+    #     sorted = False
+    #     while(sorted == False and len(list) > 1):
+    #         for i in range( len(list)-1 ):
+    #             sorted = True
+    #             if list[i].track_number > list[i+1].track_number:
+    #                 list[i], list[i+1] = list[i+1], list[i]
+    #                 sorted = False
+
+    #     return list
+
+# class Song(models.Model):
+#     title = models.CharField(max_length=128)
+#     length = models.IntegerField() #In Seconds
+#     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="songs")
+#     track_number = models.IntegerField()
+#     band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="songs")
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def length_in_min_sec(self):
+#         return f"{ int(self.length / 60) }:{ self.length % 60 }"

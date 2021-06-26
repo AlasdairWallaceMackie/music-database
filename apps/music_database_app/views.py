@@ -144,12 +144,19 @@ def album_list(request):
 
 def show_album(request, id):
     try:
-        context = {
-            'album': Album.objects.get(id = id)
-        }
+        album = Album.objects.get(id = id)
     except:
         messages.error(request, "Album not found")
         return redirect('/albums')
+
+    context = {
+        'album': album,
+        'user_rating': 0,
+    }
+
+    if request.session['current_user_id']:
+        current_user = User.objects.get(id = request.session['current_user_id'])
+        context['user_rating'] = album.get_user_rating(current_user)
     
     return render(request, 'show_album.html', context)
 
@@ -290,6 +297,41 @@ def show_user(request, id):
     return render(request, 'show_user.html', context)
 
 
+def create_rating(request, id):
+    if request.method=="POST":
+        print("Applying rating to album...")
+        try:
+            current_user = User.objects.get(id = request.session['current_user_id'])
+        except:
+            messages.error(request, "You must be logged in to rate albums")
+            return redirect('/signin')
+        try:
+            current_album = Album.objects.get(id = id)
+        except:
+            messages.error(request, "Album not found")
+            return redirect('/albums')
+
+        errors = Rating.objects.basic_validator(request.POST)
+        if errors:
+            for k,v in errors.items():
+                messages.error(request, v)
+            return redirect(f"/albums/{id}")
+        
+        # ! CHECK TO MAKE SURE IT HASN'T BEEN RATED ALREADY
+        user_rating = Rating.objects.filter(user=current_user, album=current_album).first()
+        if user_rating:
+            print("User already rated this album, changing rating")
+            user_rating.value = request.POST['rating']
+            user_rating.save()
+        else:
+            new_rating = Rating.objects.create(
+                value = request.POST['rating'],
+                album = current_album,
+                user = current_user,
+            )
+        
+        messages.success(request, "Rating applied!")
+        return redirect(f"/albums/{id}")
 
 
 
@@ -360,4 +402,5 @@ def login(request):
 def logout(request):
     print("Logging out...")
     request.session.flush()
+    messages.info(request, "Successfully logged out")
     return redirect('/')
