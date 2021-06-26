@@ -6,6 +6,16 @@ $(document).ready(function(){
     console.log(window.location.pathname)
     $('nav').find(`a[href="${window.location.pathname}"]`).addClass("active")
 
+    $('.needs-validation').submit(function(event){
+        
+        if ( !this.checkValidity() ){
+            event.preventDefault();
+            event.stopPropagation()
+        }
+
+        $(this).addClass('was-validated')
+    });
+
 
     $('#edit-album').click(function(){
         console.log("Editing album")
