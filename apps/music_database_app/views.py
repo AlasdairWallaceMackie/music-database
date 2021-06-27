@@ -262,14 +262,11 @@ def delete_album(request, id):
         except:
             return HttpResponse(f"<h3>Error: The album you are trying to delete does not exist in the database</h3>")
         
-        if album_to_delete.added_by.id != request.session['current_user_id']:
-            messages.error(request, "You do not have rights to delete this album")
-        else:
-            album_title = album_to_delete.title
-            band_id = album_to_delete.band.id
-            album_to_delete.delete()
-            print("Album deletion successfull")
-            messages.success(request, f'Successfully deleted "{album_title}"')
+        album_title = album_to_delete.title
+        band_id = album_to_delete.band.id
+        album_to_delete.delete()
+        print("Album deletion successfull")
+        messages.warning(request, f'Successfully deleted "{album_title}"')
     
     return redirect(f'/bands/{band_id}')
 

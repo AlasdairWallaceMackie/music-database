@@ -8,6 +8,35 @@
 <body>
     {% include 'util/navbar.html' %}
 
+    <div id="notice" class="container alert alert-dismissible alert-dark col-10 p-3 mb-3">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <h4 class="display-6 alert-heading mb-4">Welcome to The Music Database</h4>
+
+        <div class="container d-lg-flex justify-content-evenly">
+            <div class="card border-success mb-3" style="max-width: 20rem;">
+                <h4 class="card-header">For Anyone to Use</h4>
+                <div class="card-body">
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni dignissimos eum odio ducimus</p>
+                </div>
+            </div>
+            
+            <div class="card border-success mb-3" style="max-width: 20rem;">
+                <h4 class="card-header">All Genres Welcome</h4>
+                <div class="card-body">
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. In nisi quis odit voluptatum necessitatibus.</p>
+                </div>
+            </div>
+
+            <div class="card border-success mb-3" style="max-width: 20rem;">
+                <h4 class="card-header">Create an Account</h4>
+                <div class="card-body">
+                    <p class="card-text">With an account, you can submit, edit, and rate</p>
+                    <a href="/register"><button class="btn btn-success">Sign Up</button></a>
+                </div>
+            </div>
+        </div>    
+    </div>
+
     <main class="container d-lg-flex align-items-start justify-content-evenly">
         <div id="newest-album-releases" class="container rounded bg-dark p-3 mx-lg-3 mb-3 mb-lg-0">
             <h3 class="mb-3">Newest Album Releases</h3>
@@ -16,10 +45,12 @@
                 <a href="/albums/{{album.id}}" class="me-3">
                     <img style="height: 100px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
                 </a>
-                <div class="my-auto">
+                <div class="pt-1">
                     <h5><strong>{{album.title}}</strong> by <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h5>
-                    <br>
                     {{album.release_date}}
+                    <p class="text-warning">
+                        {% include 'util/avg_rating_stars.html' %}
+                    </p>
                 </div>
             </div>
             {% endfor %}
