@@ -8,7 +8,7 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container col-lg-6 rounded bg-dark mx-0 mx-md-auto p-3">
+    <main class="container col-lg-7 rounded bg-dark mx-0 mx-md-auto p-3">
         <h1>Album List</h1>
         <p class="d-sm-none m-0 mt-3 text-center"><-- Scroll side to side --></p>
         
@@ -20,6 +20,7 @@
                         <th>Title</th>
                         <th>Band</th>
                         <th>Release Date</th>
+                        <th>Avg. User Rating</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,13 @@
                             <td><a href="/albums/{{album.id}}">{{album.title}}</td>
                             <td><a href="/bands/{{album.band.id}}">{{album.band.name}}</a></td>
                             <td>{{album.release_date}}</td>
+                            <td class="text-warning text-nowrap">
+                                {% if album.rating_avg != 0 %}
+                                    {% include 'util/avg_rating_stars.html' %}
+                                {% else %}
+                                    <p class="text-light">No ratings</p>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

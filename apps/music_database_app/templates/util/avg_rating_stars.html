@@ -1,0 +1,31 @@
+<html>
+    <i class="bi-star-fill"></i>
+    {% if album.rating_avg > 1.2 and album.rating_avg < 1.7 %}
+        <i class="bi-star-half"></i>
+    {% elif album.rating_avg > 1.7 %}
+        <i class="bi-star-fill"></i>
+    {% else %}
+        <i class="bi-star"></i>
+    {% endif %}
+    {% if album.rating_avg > 2.2 and album.rating_avg < 2.7 %}
+        <i class="bi-star-half"></i>
+    {% elif album.rating_avg > 2.7 %}
+        <i class="bi-star-fill"></i>
+    {% else %}
+        <i class="bi-star"></i>
+    {% endif %}
+    {% if album.rating_avg > 3.2 and album.rating_avg < 3.7 %}
+        <i class="bi-star-half"></i>
+    {% elif album.rating_avg > 3.7 %}
+        <i class="bi-star-fill"></i>
+    {% else %}
+        <i class="bi-star"></i>
+    {% endif %}
+    {% if album.rating_avg > 4.2 and album.rating_avg < 4.7 %}
+        <i class="bi-star-half"></i>
+    {% elif album.rating_avg > 4.7 %}
+        <i class="bi-star-fill"></i>
+    {% else %}
+        <i class="bi-star"></i>
+    {% endif %}
+</html>

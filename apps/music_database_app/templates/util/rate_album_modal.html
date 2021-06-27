@@ -3,13 +3,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Rate '{{album.title}}'</h5>
+                    <h5 class="modal-title">
+                        {% if user_rating == 0 %}
+                            Rate '{{album.title}}'
+                        {% else %}
+                            Change your rating for '{{album.title}}'
+                        {% endif %}
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="/albums/{{album.id}}/rate" method="POST">
                     {% csrf_token %}
                     <div class="modal-body d-flex justify-content-around fs-1 text-warning">
-                        <input id="rating" type="hidden" name="rating" value="{{user_rating}}">
+                        <input id="rating" type="hidden" name="rating" value="0">
                         <div class="d-flex">
                             <i class="bi-star rating-star px-1" value="1"></i>
                             <i class="bi-star rating-star px-1" value="2"></i>
@@ -19,7 +25,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-warning">Rate</button>
+                        <button disabled id="submit-rating" type="submit" class="btn btn-warning">Rate</button>
                         <button id="cancel-rating" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>

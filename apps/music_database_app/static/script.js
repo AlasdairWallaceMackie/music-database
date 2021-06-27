@@ -60,7 +60,7 @@ $(document).ready(function(){
     });
 
     
-    if( $('#update-band').length ){
+    if( $('#update-band').length ){ //if #update-band exists
         $('#update-band').children('label').remove();
 
         $('#name').removeClass('form-control').addClass('form-control-lg').attr("placeholder", "Change band name")
@@ -145,6 +145,8 @@ $(document).ready(function(){
         $('#rating').val(new_value)
         console.log("User rating changed to: " + new_value)
 
+        $('#submit-rating').attr("disabled", false)
+
         //Darkening effect feedback when clicked
         $(this).parent().children('.bi-star-fill').css("color", "#AB631E")
     });
@@ -170,6 +172,20 @@ $(document).ready(function(){
             $(this).removeClass('bi-star').addClass('bi-star-fill')
         });
     }
+
+    if ($('#user-rating').length){ //if #user_rating exists
+        if ($('#user-rating').attr("value") == 0)
+            $('#user-rating').empty().append(`<p class="text-success">Rate this album</p>`)
+        else{
+            for (var i=1; i<=5; i++){
+            if ( i <= $('#user-rating').attr("value") )
+                $('#user-rating').append( `<i class="bi-star-fill"></i>` )
+            else
+            $('#user-rating').append( `<i class="bi-star"></i>` )
+            }
+        }
+    }
+
 
 
 
