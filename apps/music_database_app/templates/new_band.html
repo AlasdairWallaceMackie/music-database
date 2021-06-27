@@ -8,10 +8,10 @@
 <body>
     {% include 'util/navbar.html' %}
 
-    <main class="container rounded bg-dark mx-auto col-md-6 col-lg-4 p-3">
+    <main class="container rounded bg-dark mx-auto col-md-6 col-lg-4 py-3 px-5">
         <fieldset>
             <legend><h3>Submit a new band</h3></legend>
-            <form action="/bands/create" method="POST">
+            <form action="/bands/create" method="POST" class="needs-validation" novalidate>
                 {% csrf_token %}
                 {% include 'util/new_band_form_content.html' %}
                 <button class="btn btn-success" type="submit">Submit</button>

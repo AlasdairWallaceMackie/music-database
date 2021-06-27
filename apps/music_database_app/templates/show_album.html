@@ -14,16 +14,16 @@
                 {% csrf_token %}
                 <h1 id="album-title">{{album.title}}</h1>
                 <h3>By <a href="/bands/{{album.band.id}}">{{album.band.name}}</a></h3>
-                <p id="album-release-date" class="fs-5">Released on: {{album.release_date}}</p>
-                <div id="avg-rating" value="{{album.rating_avg}}">
-                    {% if album.rating_avg != 0 %}
-                        <div>
-                            Stars go here
+                <p id="album-release-date" class="fs-5 m-0">Released on: {{album.release_date}}</p>
+
+                <div id="avg-rating" value="{{avg_rating}}">
+                    {% if avg_rating != 0 %}
+                        <div class="fs-1 text-warning pointer" {% if request.session.current_user_id %} data-bs-toggle="modal" data-bs-target="#rate-album-modal" {% endif %}>
+                            {% include 'util/avg_rating_stars.html' %}
                         </div>
-                        <p>Average rating: {{album.rating_avg}}</p>
-                        <i>Rated by {{album.ratings.count}} users</i>
+                        <p>Average rating: {{avg_rating}} <i><small>by {{album.ratings.count}} users</small></i></p>
                     {% else %}
-                        <div id="no-rating" class="text-light fs-2 position-relative">
+                        <div id="no-rating" class="text-muted fs-2 position-relative">
                             <i class="bi-star"></i>
                             <i class="bi-star"></i>
                             <i class="bi-star"></i>
@@ -39,6 +39,12 @@
                         </p>
                     {% endif %}
                 </div>
+
+                <div id="user-rating" class="text-warning pointer" value="{{user_rating}}" data-bs-toggle="modal" data-bs-target="#rate-album-modal">
+                    <small class="d-inline text-white">Your rating: </small>
+                </div>
+                <br>
+
                 {% if request.session.current_username %}
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>

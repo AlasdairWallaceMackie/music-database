@@ -52,10 +52,17 @@
             {% endif %}
             {% for album in band.albums_recent_first %}
                 <div class="container bg-secondary rounded my-3 p-3">
-                    <img class="d-inline-block me-3 mb-3 mb-sm-0" style="height: 200px; width: 200px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
-                    <div class="d-inline-block">
+                    <img class="d-inline-block align-top me-3 mb-3 mb-sm-0" style="height: 200px; width: 200px;" src="{{album.cover_art.url}}" alt="{{album.title}} cover art">
+                    <div class="d-inline-block pt-lg-3">
                         <a class="text-wrap" href="/albums/{{album.id}}"><h2>{{album.title}}</h2></a>
                         <p>{{album.release_date}}</p>
+                        <div class="text-warning">
+                            {% if album.rating_avg != 0 %}
+                                {% include 'util/avg_rating_stars.html' %}
+                            {% else %}
+                                <p class="text-light">No ratings</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% empty %}

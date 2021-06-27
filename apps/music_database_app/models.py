@@ -162,7 +162,9 @@ class Rating_Manager(models.Manager):
         MAX_RATING = 5
         errors = {}
 
-        if int(post_data['rating']) < 0 or int(post_data['rating']) > MAX_RATING:
+        print("Checking for rating errors: ")
+        print(post_data['rating'])
+        if int(post_data['rating']) < 1 or int(post_data['rating']) > MAX_RATING:
             errors["invalid_rating_value"] = f"Rating can only be between 1 and {MAX_RATING}"
 
         #! CHECK TO MAKE SURE SINGLE USER DOESN'T RATE MORE THAN ONCE
@@ -223,10 +225,12 @@ class Album(models.Model):
         return f"< Album ID: {self.id} | {self.title} by {self.band.name}>"
 
     def rating_avg(self):
+        if self.ratings.count() == 0:
+            return 0
+
         sum = 0
         for rating in self.ratings.all():
             sum += rating.value
-        # avg = float( sum / )
         return round( float( sum / self.ratings.count() ), 2)
 
     def get_user_rating(self, user):

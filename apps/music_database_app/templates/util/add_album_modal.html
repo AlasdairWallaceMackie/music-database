@@ -6,20 +6,23 @@
                     <h5 class="modal-title">Add a new album</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="/albums/create" method="POST" enctype="multipart/form-data">
+                <form action="/albums/create" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     <div class="modal-body">
                         <label class="form-label" for="title">Title:</label>
-                        <input class="form-control" type="text" name="title" id="title">
+                        <input required maxlength="128" class="form-control" type="text" name="title" id="title">
+                        <div class="invalid-feedback">Title required (up to 128 characters)</div>
                         <br>
                         <label class="form-label" for="band-name">Band: <strong>{{band.name}}</strong></label>
                         <input class="form-control" type="hidden" name="band" id="band-name" value="{{band.id}}">
                         <br><br>
                         <label class="form-label" for="release_date">Release Date:</label>
-                        <input class="form-control" type="date" name="release_date" id="release_date">
+                        <input required class="form-control" type="date" name="release_date" id="release_date">
+                        <div class="invalid-feedback">Please enter a date</div>
                         <br>
                         <label class="form-label" for="cover_art">Upload Cover Art:</label>
-                        <input class="form-control" type="file" name="cover_art" id="cover_art">
+                        <input required class="form-control" type="file" name="cover_art" id="cover_art">
+                        <div class="invalid-feedback">Please upload high quality album art</div>
                         <br>
                         <input type="hidden" name="added_by_id" value="{{request.session.current_user_id}}">
                         <br>

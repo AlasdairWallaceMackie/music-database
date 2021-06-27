@@ -1,9 +1,10 @@
 <html>
     <label class="form-label" for="name">Name:</label>
-    <input class="form-control" type="text" name="name" id="name">
+    <input required class="form-control" type="text" name="name" id="name">
+    <div class="invalid-feedback">Enter a band name</div>
     <br>
     <label class="form-label" for="genre">Genre:</label>
-    <select class="form-select" name="genre" id="genre">
+    <select required class="form-select" name="genre" id="genre">
         <option value="" selected disabled>Choose...</option>
         <option value="Metal">Metal</option>
         <option value="Rock">Rock</option>
@@ -13,23 +14,27 @@
         <option value="Electronic">Electronic</option>
         <option value="Folk">Folk</option>
     </select>
+    <div class="invalid-feedback">Choose a genre</div>
     <br>
     <label class="form-label" for="founded">Year Founded:</label>
-    <input class="form-control" type="number" name="founded" id="founded">
+    <input required class="form-control" type="number" name="founded" id="founded">
+    <div class="invalid-feedback">Set a valid year</div>
     <br>
     <label class="form-label" for="country-field">Country:</label>
-    <select class="form-select" name="country" id="country-field">
+    <select required class="form-select" name="country" id="country-field">
         <option value="" selected disabled>Choose a country</option>
         {% for country in countries %}
             <option value="{{country.code}}">{{country.name}}</option>
         {% endfor %}
     </select>
+    <div class="invalid-feedback">Choose a country of origin</div>
     <br>
     <label class="form-label" for="status">Status:</label>
-    <select class="form-select" name="status" id="status">
+    <select required class="form-select" name="status" id="status">
         <option value="2">Active</option>
         <option value="1">Hiatus</option>
         <option value="0">Split-Up</option>
     </select>
+    <div class="valid-feedback">Looks good</div>
     <br>
 </html>

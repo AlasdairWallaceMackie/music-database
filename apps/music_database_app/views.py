@@ -151,10 +151,11 @@ def show_album(request, id):
 
     context = {
         'album': album,
+        'avg_rating': album.rating_avg(),
         'user_rating': 0,
     }
 
-    if request.session['current_user_id']:
+    if 'current_user_id' in request.session:
         current_user = User.objects.get(id = request.session['current_user_id'])
         context['user_rating'] = album.get_user_rating(current_user)
     
@@ -317,7 +318,6 @@ def create_rating(request, id):
                 messages.error(request, v)
             return redirect(f"/albums/{id}")
         
-        # ! CHECK TO MAKE SURE IT HASN'T BEEN RATED ALREADY
         user_rating = Rating.objects.filter(user=current_user, album=current_album).first()
         if user_rating:
             print("User already rated this album, changing rating")
@@ -402,5 +402,5 @@ def login(request):
 def logout(request):
     print("Logging out...")
     request.session.flush()
-    messages.info(request, "Successfully logged out")
+    messages.warning(request, "Successfully logged out")
     return redirect('/')
