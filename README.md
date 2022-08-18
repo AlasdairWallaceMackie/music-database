@@ -18,7 +18,7 @@
 <br>
 
 ## Edit bands with an intuitive JavaScript tool
-<img src="./screenshots/band_edit.png" height="400" />  
+<img src="./screenshots/video_band_edit.gif" height="400" />  
 
 <br>
 
